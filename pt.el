@@ -6,7 +6,7 @@
 ;; Filename: pt.el
 ;; Description: A front-end for pt, the Platinum Searcher
 ;; Created: 2014-04-27
-;; Version: 0.0.1
+;; Version: 0.0.2
 ;; Keywords: pt ack ag search
 ;;
 ;; This file is not part of GNU Emacs.
@@ -73,7 +73,7 @@
                 (append (list pt-executable)
                         pt-arguments
                         '("--nogroup" "--nocolor" "--")
-                        (list (shell-quote-argument pattern))) " ")
+                        (list (shell-quote-argument pattern) ".")) " ")
      'pt-search-mode)))
 
 ;;;###autoload
