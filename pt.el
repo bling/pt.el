@@ -66,29 +66,26 @@
     (set (make-local-variable 'compilation-error-regexp-alist-alist) (list (cons symbol pattern))))
   (set (make-local-variable 'compilation-error-face) grep-hit-face))
 
-(defun pt--search (pattern directory)
+;;;###autoload
+(defun pt-regexp (regexp directory)
+  "Run a pt search with REGEXP rooted at DIRECTORY."
+  (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))
+                     (read-directory-name "Directory: ")))
   (let ((default-directory directory))
     (compilation-start
      (mapconcat 'identity
                 (append (list pt-executable)
                         pt-arguments
                         '("--nogroup" "--nocolor" "--")
-                        (list (shell-quote-argument pattern) ".")) " ")
+                        (list (shell-quote-argument regexp) ".")) " ")
      'pt-search-mode)))
-
-;;;###autoload
-(defun pt-regexp (regexp directory)
-  "Run a pt search with REGEXP rooted at DIRECTORY."
-  (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))
-                     (read-directory-name "Directory: ")))
-  (pt--search regexp directory))
 
 ;;;###autoload
 (defun projectile-pt (regexp)
   "Run a pt search with REGEXP rooted at the current projectile project root."
   (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))))
   (if (fboundp 'projectile-project-root)
-      (pt--search regexp (projectile-project-root))
+      (pt-regexp regexp (projectile-project-root))
     (error "Projectile is not available")))
 
 (provide 'pt)
