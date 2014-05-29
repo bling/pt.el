@@ -6,8 +6,8 @@
 ;; Filename: pt.el
 ;; Description: A front-end for pt, the Platinum Searcher
 ;; Created: 2014-04-27
-;; Version: 0.0.2
-;; Keywords: pt ack ag search
+;; Version: 0.0.3
+;; Keywords: pt ack ag grep search
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -35,6 +35,7 @@
 ;; Usage:
 ;;
 ;; M-x pt-regexp
+;; M-x pt-regexp-file-pattern
 ;; M-x projectile-pt
 ;;
 ;;; Code:
@@ -67,7 +68,7 @@
   (set (make-local-variable 'compilation-error-face) grep-hit-face))
 
 ;;;###autoload
-(defun pt-regexp (regexp directory)
+(defun pt-regexp (regexp directory &optional args)
   "Run a pt search with REGEXP rooted at DIRECTORY."
   (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))
                      (read-directory-name "Directory: ")))
@@ -76,16 +77,31 @@
      (mapconcat 'identity
                 (append (list pt-executable)
                         pt-arguments
+                        args
                         '("--nogroup" "--nocolor" "--")
                         (list (shell-quote-argument regexp) ".")) " ")
      'pt-search-mode)))
+
+;;;###autoload
+(defun pt-regexp-file-pattern (regexp directory pattern)
+  "Run a pt search with REGEXP rooted at DIRECTORY with FILE-FILTER."
+  (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))
+                     (read-directory-name "Directory: ")
+                     (read-from-minibuffer "File pattern: ")))
+  (pt-regexp regexp
+             directory
+             (list (concat "--file-search-regexp=" (shell-quote-argument pattern)))))
 
 ;;;###autoload
 (defun projectile-pt (regexp)
   "Run a pt search with REGEXP rooted at the current projectile project root."
   (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))))
   (if (fboundp 'projectile-project-root)
-      (pt-regexp regexp (projectile-project-root))
+      (pt-regexp regexp
+                 (projectile-project-root)
+                 (mapcar (lambda (val) (concat "--ignore=" val))
+                         (append projectile-globally-ignored-files
+                                 projectile-globally-ignored-directories)))
     (error "Projectile is not available")))
 
 (provide 'pt)
