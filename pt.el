@@ -78,7 +78,7 @@
                 (append (list pt-executable)
                         pt-arguments
                         args
-                        '("--nogroup" "--nocolor" "--")
+                        '("-e" "--nogroup" "--nocolor" "--")
                         (list (shell-quote-argument regexp) ".")) " ")
      'pt-search-mode)))
 
