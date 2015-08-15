@@ -57,10 +57,22 @@
   :type '(repeat (string))
   :group 'pt)
 
+(defvar pt-search-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map compilation-minor-mode-map)
+    (define-key map "n" 'next-error-no-select)
+    (define-key map "p" 'previous-error-no-select)
+    (define-key map "{" 'compilation-previous-file)
+    (define-key map "}" 'compilation-next-file)
+    map)
+  "Keymap for pt-search buffers.
+`compilation-minor-mode-map' is a cdr of this.")
+
 (define-compilation-mode pt-search-mode "Pt"
   "Platinum searcher results compilation mode"
   (set (make-local-variable 'truncate-lines) t)
   (set (make-local-variable 'compilation-disable-input) t)
+  (set (make-local-variable 'tool-bar-map) grep-mode-tool-bar-map)
   (let ((symbol 'compilation-pt)
         (pattern '("^\\([^:\n]+?\\):\\([0-9]+\\):[^0-9]" 1 2)))
     (set (make-local-variable 'compilation-error-regexp-alist) (list symbol))
