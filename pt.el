@@ -91,7 +91,7 @@
                         pt-arguments
                         args
                         '("-e" "--nogroup" "--nocolor" "--")
-                        (list (shell-quote-argument regexp) directory)) " ")
+                        (list (shell-quote-argument regexp) ".")) " ")
      'pt-search-mode)))
 
 ;;;###autoload
