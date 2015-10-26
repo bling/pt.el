@@ -6,7 +6,7 @@ An emacs front-end for Pt, the [Platinum Searcher](https://github.com/monochrome
 installation
 ============
 
-Pt.el can be installed through [MELPA](http://melpa.milkbox.net/).
+Pt.el can be installed through [MELPA](https://melpa.org/).
 
 usage
 =====
