@@ -111,7 +111,7 @@ This function is called from `compilation-filter-hook'."
   "Run a pt search with REGEXP rooted at DIRECTORY."
   (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol))
                      (read-directory-name "Directory: ")))
-  (let ((default-directory directory))
+  (let ((default-directory (file-name-as-directory directory)))
     (compilation-start
      (mapconcat 'identity
                 (append (list pt-executable)
