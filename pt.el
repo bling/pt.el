@@ -138,7 +138,7 @@ This function is called from `compilation-filter-hook'."
   (if (fboundp 'projectile-project-root)
       (pt-regexp regexp
                  (projectile-project-root)
-                 (mapcar (lambda (val) (concat "--ignore=" val))
+                 (mapcar (lambda (val) (concat "--ignore=" (shell-quote-argument val)))
                          (append projectile-globally-ignored-files
                                  projectile-globally-ignored-directories)))
     (error "Projectile is not available")))
